@@ -24,4 +24,3 @@ A production-style collaborative Kanban project evolved from the original HTML/C
 ## Important
 - MongoDB is the source of truth; localStorage is only used for theme preference.
 - Socket authentication expects a JWT token in the socket handshake. For a production deployment, expose a short-lived socket token endpoint or share the authenticated cookie with server-side socket middleware.
-- The original files are preserved as `legacy-index.html`, `legacy-script.js`, and `legacy-style.css` for reference.
