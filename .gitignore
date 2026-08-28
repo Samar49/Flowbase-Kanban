@@ -1,0 +1,101 @@
+# ==========================================
+# DEPENDENCIES
+# ==========================================
+
+node_modules/
+**/node_modules/
+
+
+# ==========================================
+# ENVIRONMENT VARIABLES / SECRETS
+# ==========================================
+
+.env
+.env.*
+*.env
+*.env.local
+*.env.development
+*.env.production
+*.env.test
+
+# Allow safe example environment files
+!.env.example
+!.env.example.*
+
+
+# Credential / secret files
+*credentials*
+*credential*
+*secret*
+*secrets*
+
+
+# ==========================================
+# VITE / BUILD / CACHE
+# ==========================================
+
+.vite/
+**/.vite/
+
+.cache/
+**/.cache/
+
+.parcel-cache/
+.turbo/
+
+dist/
+**/dist/
+
+build/
+**/build/
+
+
+# ==========================================
+# VERCEL
+# ==========================================
+
+.vercel/
+
+
+# ==========================================
+# LOG FILES
+# ==========================================
+
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+
+# ==========================================
+# OS FILES
+# ==========================================
+
+.DS_Store
+Thumbs.db
+desktop.ini
+
+
+# ==========================================
+# EDITOR
+# ==========================================
+
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+.idea/
+*.swp
+*.swo
+
+
+# ==========================================
+# TEMPORARY FILES
+# ==========================================
+
+*.tmp
+*.temp
+*.bak
+.vscode/

@@ -1,0 +1,1 @@
+import {Router} from 'express';import {signup,login,logout,me} from '../controllers/auth.js';import {auth} from '../middleware/auth.js';const r=Router();r.post('/signup',signup);r.post('/login',login);r.post('/logout',auth,logout);r.get('/me',auth,me);export default r;

@@ -1,0 +1,1 @@
+import {Router} from 'express';import * as c from '../controllers/comments.js';const r=Router();r.get('/tasks/:taskId/comments',c.listComments);r.post('/tasks/:taskId/comments',c.addComment);r.put('/comments/:commentId',c.editComment);r.delete('/comments/:commentId',c.deleteComment);export default r;

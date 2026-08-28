@@ -1,0 +1,1 @@
+import {Router} from 'express';import * as c from '../controllers/activity.js';const r=Router();r.get('/projects/:projectId/activity',c.projectActivity);r.get('/tasks/:taskId/activity',c.taskActivity);export default r;
