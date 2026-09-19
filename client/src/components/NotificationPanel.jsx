@@ -69,7 +69,6 @@ export default function NotificationPanel({
           <X size={17} />
         </button>
       </div>
-
       {notifications.some((notification) => !notification.read) && (
         <button
           type="button"
@@ -80,7 +79,6 @@ export default function NotificationPanel({
           Mark all as read
         </button>
       )}
-
       <div className="notification-list">
         {notifications.length === 0 ? (
           <div className="notification-empty">
@@ -103,7 +101,6 @@ export default function NotificationPanel({
               <span className="notification-icon">
                 <Bell size={16} />
               </span>
-
               <span className="notification-copy">
                 <strong>{notification.message || "Project update"}</strong>
                 <small>
@@ -113,7 +110,6 @@ export default function NotificationPanel({
                   {timeAgo(notification.createdAt)}
                 </small>
               </span>
-
               {!notification.read && (
                 <span className="notification-unread-dot" />
               )}
