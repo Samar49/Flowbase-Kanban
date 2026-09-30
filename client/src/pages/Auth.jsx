@@ -20,11 +20,7 @@ export default function Auth({ mode = "login" }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    setForm((current) => ({
-      ...current,
-      [name]: value,
-    }));
+    setForm((current) => ({ ...current, [name]: value }));
   };
 
   const submit = async (e) => {
@@ -42,16 +38,12 @@ export default function Auth({ mode = "login" }) {
           password: form.password,
         });
       } else {
-        await login({
-          email: form.email,
-          password: form.password,
-        });
+        await login({ email: form.email, password: form.password });
       }
 
       navigate("/");
     } catch (err) {
       console.error("Authentication error:", err);
-
       setError(
         err?.response?.data?.error ||
           err?.response?.data?.message ||
@@ -79,17 +71,8 @@ export default function Auth({ mode = "login" }) {
       <form className="auth-card" onSubmit={submit}>
         <div className="brand big">Flowbase</div>
 
-        <h1>
-          {signup
-            ? "Create account"
-            : "Welcome back"}
-        </h1>
-
-        <p>
-          {signup
-            ? "Build with your team."
-            : "Continue your projects."}
-        </p>
+        <h1>{signup ? "Create account" : "Welcome back"}</h1>
+        <p>{signup ? "Build with your team." : "Continue your projects."}</p>
 
         {signup && (
           <>
@@ -131,40 +114,18 @@ export default function Auth({ mode = "login" }) {
           placeholder="Password"
           value={form.password}
           onChange={handleChange}
-          autoComplete={
-            signup
-              ? "new-password"
-              : "current-password"
-          }
+          autoComplete={signup ? "new-password" : "current-password"}
           required
         />
 
-        {error && (
-          <div className="error">
-            {error}
-          </div>
-        )}
+        {error && <div className="error">{error}</div>}
 
-        <button
-          type="submit"
-          className="save-btn"
-          disabled={loading}
-        >
-          {loading
-            ? "Please wait..."
-            : signup
-              ? "Sign up"
-              : "Log in"}
+        <button type="submit" className="save-btn" disabled={loading}>
+          {loading ? "Please wait..." : signup ? "Sign up" : "Log in"}
         </button>
 
-        <button
-          type="button"
-          className="link-btn"
-          onClick={toggleMode}
-        >
-          {signup
-            ? "Already have an account? Log in"
-            : "Create a new account"}
+        <button type="button" className="link-btn" onClick={toggleMode}>
+          {signup ? "Already have an account? Log in" : "Create a new account"}
         </button>
       </form>
     </div>

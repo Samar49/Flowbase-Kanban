@@ -13,13 +13,9 @@ export function useSocket(projectId, handlers = {}) {
   useEffect(() => {
     if (!projectId) return undefined;
 
-    const nextSocket = io(
-      import.meta.env.VITE_SOCKET_URL ||
-        "http://localhost:5000",
-      {
-        withCredentials: true,
-      }
-    );
+    const nextSocket = io(import.meta.env.VITE_SOCKET_URL || "http://localhost:5000", {
+      withCredentials: true,
+    });
 
     socketRef.current = nextSocket;
 
@@ -49,72 +45,40 @@ export function useSocket(projectId, handlers = {}) {
 
     eventNames.forEach((eventName) => {
       const dispatcher = (...args) => {
-        const handler =
-          handlersRef.current[eventName];
+        const handler = handlersRef.current[eventName];
 
         if (typeof handler === "function") {
           handler(...args);
         }
       };
 
-      dispatchers.set(
-        eventName,
-        dispatcher
-      );
-
-      nextSocket.on(
-        eventName,
-        dispatcher
-      );
+      dispatchers.set(eventName, dispatcher);
+      nextSocket.on(eventName, dispatcher);
     });
 
     nextSocket.on("connect", () => {
       setSocket(nextSocket);
-
-      nextSocket.emit(
-        "project:join",
-        projectId
-      );
+      nextSocket.emit("project:join", projectId);
     });
 
     nextSocket.on("disconnect", () => {
       setSocket(null);
     });
 
-    nextSocket.on(
-      "connect_error",
-      (error) => {
-        console.error(
-          "Socket connection error:",
-          error.message
-        );
-      }
-    );
+    nextSocket.on("connect_error", (error) => {
+      console.error("Socket connection error:", error.message);
+    });
 
     return () => {
-      nextSocket.emit(
-        "project:leave",
-        projectId
-      );
+      nextSocket.emit("project:leave", projectId);
 
-      dispatchers.forEach(
-        (
-          dispatcher,
-          eventName
-        ) => {
-          nextSocket.off(
-            eventName,
-            dispatcher
-          );
-        }
-      );
+      dispatchers.forEach((dispatcher, eventName) => {
+        nextSocket.off(eventName, dispatcher);
+      });
 
       nextSocket.disconnect();
 
-      if (
-        socketRef.current ===
-        nextSocket
-      ) {
+      if (socketRef.current === nextSocket) {
         socketRef.current = null;
       }
 

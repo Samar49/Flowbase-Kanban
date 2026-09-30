@@ -88,10 +88,8 @@ export default function Dashboard() {
     }
   };
 
-  // ==========================================
   // DELETE PROJECT
-  // ==========================================
-
+ 
   const deleteProject = async () => {
     if (!deleteTarget?._id || deletingId) {
       return;
@@ -127,20 +125,16 @@ export default function Dashboard() {
     }
   };
 
-  // ==========================================
   // ENTER KEY
-  // ==========================================
-
+  
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       createProject();
     }
   };
 
-  // ==========================================
   // OPEN PROJECT
-  // ==========================================
-
+  
   const openProject = (projectId) => {
     if (!projectId) {
       return;
@@ -149,27 +143,19 @@ export default function Dashboard() {
     navigate(`/project/${projectId}`);
   };
 
-  // ==========================================
   // RENDER
-  // ==========================================
-
+  
   return (
     <>
-      {/* ======================================
-          TOP NAVBAR
-      ====================================== */}
+      {/* TOP NAVBAR */}
 
       <WorkspaceNavbar user={user} />
 
-      {/* ======================================
-          WORKSPACE PAGE
-      ====================================== */}
+      {/* WORKSPACE PAGE */}
 
       <div className="page dashboard">
 
-        {/* ====================================
-            PAGE HEADER
-        ==================================== */}
+        {/*  PAGE HEADER */}
 
         <div className="page-head">
 
@@ -185,9 +171,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* ==================================
-              CREATE PROJECT
-          ================================== */}
+          {/* CREATE PROJECT */}
 
           <div className="create-project">
             <input
@@ -217,17 +201,13 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* ====================================
-            INVITATIONS
-        ==================================== */}
+        {/* INVITATIONS */}
 
         <InvitationInbox
           onOpenProject={openProject}
         />
 
-        {/* ====================================
-            ERROR MESSAGE
-        ==================================== */}
+        {/* ERROR MESSAGE */}
 
         {error && (
           <div className="error">
@@ -235,9 +215,7 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* ====================================
-            PROJECT CONTENT
-        ==================================== */}
+        {/* PROJECT CONTENT */}
 
         {loading ? (
 
@@ -284,9 +262,7 @@ export default function Dashboard() {
                   key={project._id}
                 >
 
-                  {/* ============================
-                      PROJECT CARD
-                  ============================ */}
+                  {/* PROJECT CARD */}
 
                   <button
                     type="button"
@@ -314,9 +290,7 @@ export default function Dashboard() {
                     </small>
                   </button>
 
-                  {/* ============================
-                      DELETE PROJECT
-                  ============================ */}
+                  {/* DELETE PROJECT */}
 
                   {isOwner && (
                     <button
@@ -339,9 +313,7 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* ====================================
-            DELETE PROJECT MODAL
-        ==================================== */}
+        {/*DELETE PROJECT MODAL */}
 
         <DeleteProjectModal
           project={deleteTarget}

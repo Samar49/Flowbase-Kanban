@@ -4,6 +4,10 @@ import Project from "../models/Project.js";
 /**
  * Create one notification per project member, excluding the actor,
  * and deliver the notification immediately through Socket.IO.
+ *
+ * If the caller already has the project loaded (with `owner` and
+ * `members` present as raw ids, not populated user objects), pass it
+ * as `project` to avoid a redundant re-fetch.
  */
 export async function notifyProjectMembers({
   req,
@@ -13,10 +17,11 @@ export async function notifyProjectMembers({
   type,
   message,
   includeOwner = true,
+  project: preloadedProject = null,
 }) {
-  const project = await Project.findById(projectId).select(
-    "owner members name"
-  );
+  const project =
+    preloadedProject ||
+    (await Project.findById(projectId).select("owner members name"));
 
   if (!project) return [];
 
@@ -26,7 +31,7 @@ export async function notifyProjectMembers({
       : [...(project.members || [])]
     )
       .filter(Boolean)
-      .map((id) => String(id))
+      .map((id) => String(id?._id || id))
   );
 
   if (actorId) {
