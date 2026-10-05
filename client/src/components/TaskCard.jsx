@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Calendar,
-  Clock3,
-  GripVertical,
-  Play,
-  Pause,
-  UserCircle,
-} from "lucide-react";
+import { Calendar, Clock3, GripVertical, Play, Pause, UserCircle, Check } from "lucide-react";
 import { formatDate, timeAgo } from "../utils/format";
 
 export default function TaskCard({
@@ -20,13 +13,23 @@ export default function TaskCard({
 }) {
   const done = Boolean(task.completedAt);
 
+  const subtasks = task.subtasks || [];
+  const completedSubtasks = subtasks.filter((subtask) => subtask.completed).length;
+  const totalSubtasks = subtasks.length;
+
+  const subtaskPercentage =
+    totalSubtasks > 0 ? Math.round((completedSubtasks / totalSubtasks) * 100) : 0;
+
+  // Show only first 3 subtasks on the card; the rest are summarized as "+ X more subtasks".
+  const visibleSubtasks = subtasks.slice(0, 3);
+  const remainingSubtasks = totalSubtasks > 3 ? totalSubtasks - 3 : 0;
+
   const handlePointerDown = (event) => {
-    if (event.button !== 0 && event.pointerType !== "touch") return;
+    if (event.button !== 0 && event.pointerType !== "touch") {
+      return;
+    }
 
-    const interactive = event.target.closest(
-      "button, input, textarea, select, a"
-    );
-
+    const interactive = event.target.closest("button, input, textarea, select, a");
     if (interactive) return;
 
     onPointerDown?.(event, task);
@@ -34,9 +37,9 @@ export default function TaskCard({
 
   return (
     <article
-      className={`task pri-${task.priority}${
-        isDragging ? " is-dragging" : ""
-      }${isMoving ? " is-moving" : ""}`}
+      className={`task pri-${task.priority}${isDragging ? " is-dragging" : ""}${
+        isMoving ? " is-moving" : ""
+      }`}
       onPointerDown={handlePointerDown}
       onClick={() => onOpen(task)}
       tabIndex={0}
@@ -50,17 +53,11 @@ export default function TaskCard({
     >
       <div className="task-top">
         <div className="task-id-wrap">
-          <GripVertical
-            className="task-drag"
-            size={15}
-            aria-hidden="true"
-          />
+          <GripVertical className="task-drag" size={15} aria-hidden="true" />
           <span className="task-serial">TASK #{task.serial}</span>
         </div>
 
-        <span className={`task-priority-badge ${task.priority}`}>
-          {task.priority}
-        </span>
+        <span className={`task-priority-badge ${task.priority}`}>{task.priority}</span>
       </div>
 
       <h3>{task.title}</h3>
@@ -79,13 +76,7 @@ export default function TaskCard({
 
       <div className="task-meta">
         {task.dueDate && (
-          <span
-            className={
-              new Date(task.dueDate) < new Date() && !done
-                ? "overdue"
-                : ""
-            }
-          >
+          <span className={new Date(task.dueDate) < new Date() && !done ? "overdue" : ""}>
             <Calendar size={13} />
             {formatDate(task.dueDate)}
           </span>
@@ -106,33 +97,43 @@ export default function TaskCard({
         )}
       </div>
 
-      {task.subtasks?.length > 0 && (
-        <div className="sub-progress">
-          <div className="sub-progress-top">
-            <span>
-              {task.subtasks.filter((subtask) => subtask.completed).length}/
-              {task.subtasks.length} subtasks
-            </span>
-            <strong>
-              {Math.round(
-                (task.subtasks.filter((subtask) => subtask.completed).length /
-                  task.subtasks.length) *
-                  100
-              )}
-              %
-            </strong>
+      {totalSubtasks > 0 && (
+        <div className="subtask-section">
+          <div className="sub-progress">
+            <div className="sub-progress-top">
+              <span>Subtasks</span>
+              <strong>
+                {completedSubtasks}/{totalSubtasks}
+              </strong>
+            </div>
+
+            <div className="sub-progress-track">
+              <i style={{ width: `${subtaskPercentage}%` }} />
+            </div>
           </div>
 
-          <div className="sub-progress-track">
-            <i
-              style={{
-                width: `${
-                  (task.subtasks.filter((subtask) => subtask.completed).length /
-                    task.subtasks.length) *
-                  100
-                }%`,
-              }}
-            />
+          <div className="subtask-list">
+            {visibleSubtasks.map((subtask, index) => (
+              <div
+                key={subtask._id || subtask.id || index}
+                className={`subtask-item ${subtask.completed ? "subtask-completed" : ""}`}
+              >
+                <span
+                  className={`subtask-checkbox ${subtask.completed ? "checked" : ""}`}
+                  aria-hidden="true"
+                >
+                  {subtask.completed && <Check size={11} strokeWidth={3} />}
+                </span>
+
+                <span className="subtask-title">{subtask.title}</span>
+              </div>
+            ))}
+
+            {remainingSubtasks > 0 && (
+              <div className="subtask-more">
+                + {remainingSubtasks} more {remainingSubtasks === 1 ? "subtask" : "subtasks"}
+              </div>
+            )}
           </div>
         </div>
       )}
